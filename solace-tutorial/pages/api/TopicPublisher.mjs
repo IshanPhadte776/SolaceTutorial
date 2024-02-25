@@ -28,12 +28,12 @@ export default class TopicPublisher {
         }
 
         // Extract params
-        if (argv.length < (2 + 3)) { // expecting 3 real arguments
-            this.log('Cannot connect: expecting all arguments' +
-                ' <protocol://host[:port]> <client-username>@<message-vpn> <client-password>.\n' +
-                'Available protocols are ws://, wss://, http://, https://, tcp://, tcps://');
+        // if (argv.length < (2 + 3)) { // expecting 3 real arguments
+        //     this.log('Cannot connect: expecting all arguments' +
+        //         ' <protocol://host[:port]> <client-username>@<message-vpn> <client-password>.\n' +
+        //         'Available protocols are ws://, wss://, http://, https://, tcp://, tcps://');
             
-        }
+        // }
 
 
         const hosturl = 'ws://localhost:8008';
@@ -66,19 +66,19 @@ export default class TopicPublisher {
         this.session.on(solace.SessionEventCode.UP_NOTICE, (sessionEvent) => {
             this.log('=== Successfully connected and ready to publish messages. ===');
             this.publish();
-            this.exit();
+            //this.exit();
         });
         this.session.on(solace.SessionEventCode.CONNECT_FAILED_ERROR, (sessionEvent) => {
             this.log('Connection failed to the message router: ' + sessionEvent.infoStr +
                 ' - check correct parameter values and connectivity!');
         });
-        this.session.on(solace.SessionEventCode.DISCONNECTED, (sessionEvent) => {
-            this.log('Disconnected.');
-            if (this.session !== null) {
-                this.session.dispose();
-                this.session = null;
-            }
-        });
+        // this.session.on(solace.SessionEventCode.DISCONNECTED, (sessionEvent) => {
+        //     this.log('Disconnected.');
+        //     if (this.session !== null) {
+        //         this.session.dispose();
+        //         this.session = null;
+        //     }
+        // });
         
         // Connect the session
         try {
@@ -108,24 +108,24 @@ export default class TopicPublisher {
         }
     }
 
-    exit() {
-        this.disconnect();
-        setTimeout(() => {
-            //process.exit();
-        }, 1000); // wait for 1 second to finish
-    }
+    // exit() {
+    //     this.disconnect();
+    //     setTimeout(() => {
+    //         //process.exit();
+    //     }, 1000); // wait for 1 second to finish
+    // }
 
     // Gracefully disconnects from Solace PubSub+ Event Broker
-    disconnect() {
-        this.log('Disconnecting from Solace PubSub+ Event Broker...');
-        if (this.session !== null) {
-            try {
-                this.session.disconnect();
-            } catch (error) {
-                this.log(error.toString());
-            }
-        } else {
-            this.log('Not connected to Solace PubSub+ Event Broker.');
-        }
-    }
+    // disconnect() {
+    //     this.log('Disconnecting from Solace PubSub+ Event Broker...');
+    //     if (this.session !== null) {
+    //         try {
+    //             this.session.disconnect();
+    //         } catch (error) {
+    //             this.log(error.toString());
+    //         }
+    //     } else {
+    //         this.log('Not connected to Solace PubSub+ Event Broker.');
+    //     }
+    // }
 }
